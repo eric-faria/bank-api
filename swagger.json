@@ -1,0 +1,83 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "tilte": "Bank API",
+        "description": "API simples de gerenciamento de transações bancárias",
+        "contact": { 
+            "email": "ericdeofaria@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "Local Server"
+        }
+    ],
+    "paths": {
+        "/clients": {
+            "post": {
+                "summary": "Cadastro de Clientes",
+                "description": "Rota responsável pelo cadastro de novos clientes",
+                "tags": ["Clients"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#components/schemas/Client"
+                            },
+                            "examples": {
+                                "Client": {
+                                    "value": {
+                                        "name": "Elon Musk",
+                                        "cpf": "352.194.810-29",
+                                        "password": "senha123"
+                                    }
+                                    
+                                }
+                               
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Blank fields or invalid CPF."
+                    },
+                    "409": {
+                        "description": "CPF already registered."
+                    },
+                    "201": {
+                        "description": "Created.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Client"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Client": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "cpf": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
