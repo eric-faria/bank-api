@@ -9,7 +9,7 @@ const { expect } = chai;
 const mongoDbUrl = `mongodb://localhost:27017/`;
 const url = 'http://localhost:3000';
 
-describe('POST /clients/', () => {
+describe('POST /login/', () => {
   let connection;
   let db;
 
@@ -23,38 +23,39 @@ describe('POST /clients/', () => {
 
   beforeEach(async () => {
     await db.collection('clients').deleteMany({});
+    const clients = {
+      name: 'Elon Musk',
+      cpf: '352.194.810-29',
+      password: 'senha123'
+    };
+    await db.collection('clients').insertOne(clients);
   });
 
   after(async () => {
     await connection.close();
   });
 
-  it('quando é criado com sucesso', async () => {
+  it('quando é logado com sucesso', async () => {
     await frisby
-      .post(`${url}/clients/`,
+      .post(`${url}/login/`,
         {
-            name: 'Elon Musk',
-            cpf: '352.194.810-29',
-            password: 'senha123'
+          cpf: '352.194.810-29',
+          password: 'senha123'
         })
-      .expect('status', 201)
+      .expect('status', 200)
       .then((response) => {
         const { body } = response;
         const result = JSON.parse(body);
-        expect(result).to.have.property('_id');
-        expect(result).to.have.property('name');
-        expect(result).to.have.property('cpf');
-        expect(result).to.have.property('balance');
+        expect(result).to.have.property('token');
       });
   });
 
   it('ERRO: CPF em branco', async () => {
     await frisby
-      .post(`${url}/clients/`,
+      .post(`${url}/login/`,
         {
-            name: 'Elon Musk',
-            cpf: '',
-            password: 'senha123'
+          cpf: '',
+          password: 'senha123'
         })
       .expect('status', 400)
       .then((response) => {
@@ -66,11 +67,10 @@ describe('POST /clients/', () => {
 
   it('ERRO: password em branco', async () => {
     await frisby
-      .post(`${url}/clients/`,
+      .post(`${url}/login/`,
         {
-            name: 'Elon Musk',
-            cpf: '352.194.810-29',
-            password: ''
+          cpf: '352.194.810-29',
+          password: ''
         })
       .expect('status', 400)
       .then((response) => {
@@ -80,38 +80,36 @@ describe('POST /clients/', () => {
       });
   });
 
-  it('ERRO: name em branco', async () => {
+  it('ERRO: usuário inválido', async () => {
     await frisby
-      .post(`${url}/clients/`,
+      .post(`${url}/login/`,
         {
-            name: '',
-            cpf: '352.194.810-29',
-            password: 'senha123'
+          cpf: '352.194.810-23',
+          password: 'senha123'
         })
-      .expect('status', 400)
+      .expect('status', 401)
       .then((response) => {
         const { body } = response;
         const result = JSON.parse(body);
-        expect(result.message).to.equal('All fields must be filled.');
+        expect(result.message).to.equal('Incorrect username or password');
       });
   });
 
-  it('ERRO: CPF inválido', async () => {
+  it('ERRO: password inválido', async () => {
     await frisby
-      .post(`${url}/clients/`,
+      .post(`${url}/login/`,
         {
-            name: 'Elon Musk',
-            cpf: '123.456.789-10',
-            password: 'senha123'
+          cpf: '352.194.810-29',
+          password: '123senha'
         })
-      .expect('status', 400)
+      .expect('status', 401)
       .then((response) => {
         const { body } = response;
         const result = JSON.parse(body);
-        expect(result.message).to.equal('Invalid CPF. Try again.');
+        expect(result.message).to.equal('Incorrect username or password');
       });
   });
-
-  
 
 });
+    
+

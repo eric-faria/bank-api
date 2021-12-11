@@ -42,10 +42,26 @@
                 },
                 "responses": {
                     "400": {
-                        "description": "Blank fields or invalid CPF."
+                        "description": "Blank fields or invalid CPF.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Error"
+                                }
+                            }
+                        }
                     },
                     "409": {
-                        "description": "CPF already registered."
+                        "description": "CPF already registered.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Error"
+                                }
+                            }
+                        }
                     },
                     "201": {
                         "description": "Created.",
@@ -54,6 +70,72 @@
                                 "schema": {
                                     "type": "object",
                                     "$ref": "#components/schemas/Client"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "summary": "Login",
+                "description": "Rota responsável pela autenticação de clientes",
+                "tags": ["Clients"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#components/schemas/Login"
+                            },
+                            "examples": {
+                                "Login": {
+                                    "value": {
+                                        "cpf": "352.194.810-29",
+                                        "password": "senha123"
+                                    }
+                                    
+                                }
+                               
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Blank fields or invalid CPF.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "CPF already registered.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Sucessful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                                "type": "string",
+                                                "description": "Authentication token"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -74,6 +156,25 @@
                         "type": "string"
                     },
                     "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Login": {
+                "type": "object",
+                "properties": {
+                    "cpf": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Error": {
+                "type": "object",
+                "properties": {
+                    "message": {
                         "type": "string"
                     }
                 }
