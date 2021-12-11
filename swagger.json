@@ -158,7 +158,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#components/schemas/Login"
+                                "$ref": "#components/schemas/Deposit"
                             },
                             "examples": {
                                 "Login": {
@@ -174,7 +174,7 @@
                 },
                 "responses": {
                     "400": {
-                        "description": "Blank fields or invalid CPF.",
+                        "description": "Invalid entries.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -184,8 +184,69 @@
                             }
                         }
                     },
-                    "409": {
-                        "description": "CPF already registered.",
+                    "401": {
+                        "description": "Authentication error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Sucess",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#components/schemas/Client"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/accounts/transfer": {
+            "post": {
+                "summary": "Tranferência",
+                "description": "Rota responsável pela realização de transferência",
+                "tags": ["Transactions"],
+                "security": [{ "bearerAuth": [] }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#components/schemas/Transfer"
+                            },
+                            "examples": {
+                                "Transfer": {
+                                    "value": {
+                                        "to": "880.137.510-74",
+                                        "value": 500
+                                      }
+                                    
+                                }
+                               
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Invalid entries.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication error.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -247,6 +308,17 @@
             "Deposit": {
                 "type": "object",
                 "properties": {
+                    "value": {
+                        "type": "number"
+                    }
+                }
+            },
+            "Transfer": {
+                "type": "object",
+                "properties": {
+                    "cpf": {
+                        "type": "string"
+                    },
                     "value": {
                         "type": "number"
                     }

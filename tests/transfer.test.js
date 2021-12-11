@@ -9,7 +9,7 @@ const { expect } = chai;
 const mongoDbUrl = `mongodb://localhost:27017/`;
 const url = 'http://localhost:3000';
 
-describe('POST /accounts/deposit/', () => {
+describe('POST /accounts/transfer/', () => {
   let connection;
   let db;
 
@@ -23,20 +23,28 @@ describe('POST /accounts/deposit/', () => {
 
   beforeEach(async () => {
     await db.collection('clients').deleteMany({});
-    const clients = {
+    const clients = [
+     {
       name: 'Elon Musk',
       cpf: '352.194.810-29',
       password: 'senha123',
-      balance: 0
-    };
-    await db.collection('clients').insertOne(clients);
+      balance: 1000
+     },
+     {
+        name: 'Bill Gates',
+        cpf: '880.137.510-74',
+        password: 'senha123',
+        balance: 0
+       }
+    ];
+    await db.collection('clients').insertMany(clients);
   });
 
   after(async () => {
     await connection.close();
   });
 
-  it('quando é depositado com sucesso', async () => {
+  it('quando é transferido com sucesso', async () => {
     await frisby
       .post(`${url}/login/`, {
         cpf: '352.194.810-29',
@@ -55,24 +63,27 @@ describe('POST /accounts/deposit/', () => {
               },
             },
           })
-          .post(`${url}/accounts/deposit`,
+          .post(`${url}/accounts/transfer`,
           {
+            to: '880.137.510-74',
             value: 200
           })
           .expect('status', 200)
           .then((response) => {
           const { body } = response;
           const result = JSON.parse(body);
-          expect(result.balance).to.equal(200);
+          expect(result.balance).to.equal(800);
         });
+        
    });
   });
 
   it('ERRO: não autenticado', async () => {
     await frisby
-        .post(`${url}/accounts/deposit`,
+        .post(`${url}/accounts/transfer`,
           {
-            value: 200
+            to: "880.137.510-74",
+            value: 500
           })
           .expect('status', 401)
           .then((response) => {
@@ -92,9 +103,10 @@ describe('POST /accounts/deposit/', () => {
               },
             },
           })
-          .post(`${url}/accounts/deposit`,
+          .post(`${url}/accounts/transfer`,
           {
-            value: 200
+            to: "880.137.510-74",
+            value: 500
           })
           .expect('status', 401)
           .then((response) => {
@@ -123,9 +135,10 @@ describe('POST /accounts/deposit/', () => {
               },
             },
           })
-          .post(`${url}/accounts/deposit`,
+          .post(`${url}/accounts/transfer`,
           {
-            
+            to: "880.137.510-74",
+            value: '',
           })
           .expect('status', 400)
           .then((response) => {
@@ -155,9 +168,10 @@ describe('POST /accounts/deposit/', () => {
               },
             },
           })
-          .post(`${url}/accounts/deposit`,
+          .post(`${url}/accounts/transfer`,
           {
-             "value": -1
+            to: "880.137.510-74",
+            value: -1
           })
           .expect('status', 400)
           .then((response) => {
@@ -187,15 +201,82 @@ describe('POST /accounts/deposit/', () => {
               },
             },
           })
-          .post(`${url}/accounts/deposit`,
+          .post(`${url}/accounts/transfer`,
           {
-             "value": 2001
+            to: "880.137.510-74",
+            value: 2001
           })
           .expect('status', 400)
           .then((response) => {
           const { body } = response;
           const result = JSON.parse(body);
           expect(result.message).to.equal('Invalid value. Try again.');
+        });
+   });
+  });
+
+  it('ERRO: CPF destino não encontrado', async () => {
+    await frisby
+      .post(`${url}/login/`, {
+        cpf: '352.194.810-29',
+        password: 'senha123',
+      })
+      .expect('status', 200)
+      .then((response) => {
+        const { body } = response;
+        const result = JSON.parse(body);
+        return frisby
+          .setup({
+            request: {
+              headers: {
+                Authorization: result.token,
+                'Content-Type': 'application/json',
+              },
+            },
+          })
+          .post(`${url}/accounts/transfer`,
+          {
+            to: "880.137.510-47",
+            value: 500
+          })
+          .expect('status', 400)
+          .then((response) => {
+          const { body } = response;
+          const result = JSON.parse(body);
+          expect(result.message).to.equal('Invalid account. Try again.');
+        });
+   });
+  });
+
+  it('ERRO: saldo insuficiente', async () => {
+    await frisby
+      .post(`${url}/login/`, {
+        cpf: '352.194.810-29',
+        password: 'senha123',
+      })
+      .expect('status', 200)
+      .then((response) => {
+        const { body } = response;
+        const result = JSON.parse(body);
+        return frisby
+          .setup({
+            request: {
+              headers: {
+                Authorization: result.token,
+                'Content-Type': 'application/json',
+              },
+            },
+          })
+          .post(`${url}/accounts/transfer`,
+          {
+            to: "880.137.510-74",
+            value: 1500
+          })
+          .expect('status', 400)
+          .then((response) => {
+          const { body } = response;
+          const result = JSON.parse(body);
+          expect(result.message).to.equal('Insufficient funds. Try again.');
         });
    });
   });
