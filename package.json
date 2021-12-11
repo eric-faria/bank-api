@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha ./tests/*$NAME*.test.js --timeout=3000 --exit",
-    "test:coverage": "nyc npm run test",
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
@@ -17,7 +16,6 @@
     "http-status-codes": "^2.1.4",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.2.1",
-    "nyc": "^15.1.0",
     "swagger-ui-express": "^4.2.0"
   },
   "devDependencies": {

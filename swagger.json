@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "tilte": "Bank API",
+        "title": "Bank API",
         "description": "API simples de gerenciamento de transações bancárias",
         "contact": { 
             "email": "ericdeofaria@gmail.com"
@@ -24,7 +24,12 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#components/schemas/Client"
+                                "type": "object",
+                                "properties": {
+                                    "value": {
+                                            "type": "number"
+                                    }
+                                }
                             },
                             "examples": {
                                 "Client": {
@@ -42,7 +47,7 @@
                 },
                 "responses": {
                     "400": {
-                        "description": "Blank fields or invalid CPF.",
+                        "description": "Invalid value.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -52,8 +57,8 @@
                             }
                         }
                     },
-                    "409": {
-                        "description": "CPF already registered.",
+                    "401": {
+                        "description": "Autentication error (missing token or invalid token).",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -142,6 +147,66 @@
                     }
                 }
             }
+        },
+        "/accounts/deposit": {
+            "post": {
+                "summary": "Depósito",
+                "description": "Rota responsável pela realização de depósitos",
+                "tags": ["Transactions"],
+                "security": [{ "bearerAuth": [] }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#components/schemas/Login"
+                            },
+                            "examples": {
+                                "Login": {
+                                    "value": {
+                                        "value": 200
+                                    }
+                                    
+                                }
+                               
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Blank fields or invalid CPF.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "CPF already registered.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Sucess",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#components/schemas/Client"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -155,8 +220,8 @@
                     "cpf": {
                         "type": "string"
                     },
-                    "password": {
-                        "type": "string"
+                    "balance": {
+                        "type": "number"
                     }
                 }
             },
@@ -178,7 +243,22 @@
                         "type": "string"
                     }
                 }
+            },
+            "Deposit": {
+                "type": "object",
+                "properties": {
+                    "value": {
+                        "type": "number"
+                    }
+                }
             }
+        },
+        "securitySchemes":{
+          "bearerAuth": {
+              "type": "apiKey",
+              "in": "header",
+              "name": "authorization"
+          }
         }
     }
 }

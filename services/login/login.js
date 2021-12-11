@@ -19,5 +19,5 @@ const login = async (cpf, password) => {
   return { err: false, message: '', token };
 };
 
-  module.exports = login;
+  module.exports = { login, key};
   
