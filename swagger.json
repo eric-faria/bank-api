@@ -149,7 +149,7 @@
             }
         },
         "/accounts/deposit": {
-            "post": {
+            "put": {
                 "summary": "Depósito",
                 "description": "Rota responsável pela realização de depósitos",
                 "tags": ["Transactions"],

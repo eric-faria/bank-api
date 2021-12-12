@@ -9,7 +9,7 @@ const { expect } = chai;
 const mongoDbUrl = `mongodb://localhost:27017/`;
 const url = 'http://localhost:3000';
 
-describe('POST /accounts/deposit/', () => {
+describe('PUT /accounts/deposit/', () => {
   let connection;
   let db;
 
@@ -55,7 +55,7 @@ describe('POST /accounts/deposit/', () => {
               },
             },
           })
-          .post(`${url}/accounts/deposit`,
+          .put(`${url}/accounts/deposit`,
           {
             value: 200
           })
@@ -70,7 +70,7 @@ describe('POST /accounts/deposit/', () => {
 
   it('ERRO: não autenticado', async () => {
     await frisby
-        .post(`${url}/accounts/deposit`,
+        .put(`${url}/accounts/deposit`,
           {
             value: 200
           })
@@ -92,7 +92,7 @@ describe('POST /accounts/deposit/', () => {
               },
             },
           })
-          .post(`${url}/accounts/deposit`,
+          .put(`${url}/accounts/deposit`,
           {
             value: 200
           })
@@ -123,7 +123,7 @@ describe('POST /accounts/deposit/', () => {
               },
             },
           })
-          .post(`${url}/accounts/deposit`,
+          .put(`${url}/accounts/deposit`,
           {
             
           })
@@ -155,7 +155,7 @@ describe('POST /accounts/deposit/', () => {
               },
             },
           })
-          .post(`${url}/accounts/deposit`,
+          .put(`${url}/accounts/deposit`,
           {
              "value": -1
           })
@@ -187,7 +187,7 @@ describe('POST /accounts/deposit/', () => {
               },
             },
           })
-          .post(`${url}/accounts/deposit`,
+          .put(`${url}/accounts/deposit`,
           {
              "value": 2001
           })
