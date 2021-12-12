@@ -148,6 +148,61 @@
                 }
             }
         },
+        "/history": {
+            "get": {
+                "summary": "Histórico de transações",
+                "description": "Rota responsável pelo retorno do histórico de transações do cliente",
+                "tags": ["Transactions"],
+                "security": [{ "bearerAuth": [] }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    
+                                }
+                            },
+                            "examples": {
+                                "Client": {
+                                    "value": {
+                                        
+                                    }
+                                    
+                                }
+                               
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Autentication error (missing token or invalid token).",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "History",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/accounts/deposit": {
             "put": {
                 "summary": "Depósito",

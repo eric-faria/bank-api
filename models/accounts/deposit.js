@@ -1,6 +1,7 @@
 const { ObjectId } = require('mongodb');
 const connection = require('../connection');
 const { getByCPF } = require('../clients');
+const { create } = require('../transactions')
 
 const update = async (cpf, value) => {
   const db = await connection();
@@ -11,6 +12,7 @@ const update = async (cpf, value) => {
   );
   client = await getByCPF(cpf);
   delete client.password;
+  await create(client.cpf, null, value);
   return client;
 };
 
