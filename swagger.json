@@ -10,6 +10,10 @@
     },
     "servers": [
         {
+            "url": "http://https://simple-bank-api.herokuapp.com/",
+            "description": "Heroku Server"
+        },
+        {
             "url": "http://localhost:3000",
             "description": "Local Server"
         }
