@@ -4,7 +4,7 @@
   "description": "Simple bank account manager API",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./tests/*$NAME*.test.js --timeout=3000 --exit",
+    "test": "mocha ./tests/*$NAME*.test.js --timeout=5000 --exit",
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
