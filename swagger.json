@@ -10,7 +10,7 @@
     },
     "servers": [
         {
-            "url": "http://https://simple-bank-api.herokuapp.com/",
+            "url": "https://simple-bank-api.herokuapp.com/",
             "description": "Heroku Server"
         },
         {
