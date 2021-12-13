@@ -61,6 +61,17 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "Autentication error (missing token or invalid token).",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
                     "409": {
                         "description": "Already registred.",
                         "content": {

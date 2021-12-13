@@ -109,7 +109,7 @@ describe('POST /clients/', () => {
             cpf: '123.456.789-10',
             password: 'senha123'
         })
-      .expect('status', 409)
+      .expect('status', 400)
       .then((response) => {
         const { body } = response;
         const result = JSON.parse(body);
