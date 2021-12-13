@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-const MONGO_DB_URL = `mongodb://localhost:27017/BankAPI`;
+const MONGO_DB_URL = process.env.DB_URL //|| `mongodb://localhost:27017/BankAPI`;
 const DB_NAME = 'BankAPI';
 
 let connection = null;

@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
 const model = require('../../models/clients');
+const dotenv = require('dotenv');
+dotenv.config();
 
-const key = 'magicKey';
+const key = process.env.KEY;
 
 const config = {
   expiresIn: '7d',

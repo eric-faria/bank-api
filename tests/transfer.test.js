@@ -6,20 +6,23 @@ const { MongoClient } = require('mongodb');
 chai.use(chaiHttp);
 const { expect } = chai;
 
-const mongoDbUrl = `mongodb://localhost:27017/`;
-const url = 'http://localhost:3000';
+const mongoDbUrl = process.env.DB_URL || `mongodb://localhost:27017/`;
+const url = process.env.APP_URL || 'http://localhost:3000';
 
 describe('POST /accounts/transfer/', () => {
   let connection;
   let db;
 
   before(async () => {
-    connection = await MongoClient.connect(mongoDbUrl, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    connection = (await MongoClient.connect(
+      mongoDbUrl,
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      },
+    ))
     db = await connection.db('BankAPI');
-  });
+    });
 
   beforeEach(async () => {
     await db.collection('clients').deleteMany({});

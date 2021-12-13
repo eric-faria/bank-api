@@ -430,7 +430,7 @@
             "Transfer": {
                 "type": "object",
                 "properties": {
-                    "cpf": {
+                    "to": {
                         "type": "string"
                     },
                     "value": {
