@@ -61,8 +61,8 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Autentication error (missing token or invalid token).",
+                    "409": {
+                        "description": "Already registred.",
                         "content": {
                             "application/json": {
                                 "schema": {
