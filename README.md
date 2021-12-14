@@ -57,7 +57,7 @@ Para autenticar-se, é necessário informar o token retornado ao se executar um 
 
 ![Token](./public/token.png)
 
-Ao se fazer uma requisição à API, tal token deve ser informado no campo Authorization, da requisição.
+Ao se fazer uma requisição à API, tal token deve ser informado no campo Authorization, no cabeçalho da requisição.
 
 Autenticando-se na documentação, caso esteja usando a [documentação](#documentação), para autenticar-se bata clicar no botão "Authorize",
 
