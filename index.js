@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(require('./controllers/root'));
 
 app.use("/api-docs/", swagger.serve, swagger.setup(require('./swagger.json')));
-app.use("/", swagger.serve, swagger.setup(require('./swagger.json')));
+app.get("/", swagger.serve, swagger.setup(require('./swagger.json')));
 
 
 app.listen(port, () => console.log(`App listening on port ${port}!`));
